@@ -9,28 +9,11 @@
 
 class inverted_item {
 public:
+    inverted_item() : document_id{} {
+
+    }
+
     explicit inverted_item(const std::string &id) : document_id{id} {
-        positions{new std::vector<int>{}};
-    }
-
-    inverted_item(const inverted_item &rhs) = delete;
-
-    inverted_item(const inverted_item &&rhs) : document_id{std::move(rhs.document_id)},
-                                               positions{std::move(rhs.positions)} {
-    }
-
-    inverted_item &operator=(inverted_item &&other) noexcept {
-        if (this != other) {
-            delete positions;
-            document_id = other.document_id;
-            positions = std::move(other);
-            delete other.positions;
-        }
-        return *this;
-    }
-
-    ~inverted_item() {
-        delete positions;
     }
 
     void add_position(int p) {
@@ -46,8 +29,8 @@ public:
     }
 
 private:
-    std::string document_id;
-    const std::vector<int> *positions;
+    std::string document_id{};
+    std::vector<int> positions{};
 };
 
 #endif //MINOS_INVERTED_ITEM_H

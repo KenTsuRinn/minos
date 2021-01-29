@@ -10,23 +10,26 @@
 
 class inverted_index {
 public:
-    explicit inverted_index(int id) : token_id{id}, document_count{0}, position_count{0} {
-        postings{new std::vector<inverted_item>};
+    inverted_index() {
+
+    }
+
+    explicit inverted_index(unsigned int id) : token_id{id} {
     }
 
     void add_item(const inverted_item &item) {
         postings.emplace_back(std::move(item));
     }
 
-    const int &get_token_id() {
-        return this.token_id;
+    const unsigned int &get_token_id() {
+        return this->token_id;
     }
 
-    const int &get_document_count() {
-        return this.document_count;
+    const unsigned int &get_document_count() {
+        return this->document_count;
     };
 
-    const int &get_position_count() {
+    const unsigned int &get_position_count() {
         return this->position_count;
     };
 
@@ -39,10 +42,10 @@ public:
     }
 
 private:
-    int token_id;
-    const std::vector<inverted_item> &postings;
-    int document_count;
-    int position_count;
+    unsigned int token_id{};
+    std::vector<inverted_item> postings{};
+    unsigned int document_count{};
+    unsigned int position_count{};
 };
 
 #endif //MINOS_INVERTED_INDEX_H
