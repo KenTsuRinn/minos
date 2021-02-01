@@ -5,17 +5,23 @@
 #include <inverted_item.h>
 #include <sstream>
 #include <filesystem>
+#include <ContentReader.h>
 
 int main() {
     using recursive_directory_iterator = std::filesystem::recursive_directory_iterator;
     for (const auto &dirEntry : recursive_directory_iterator("./data")) {
-
         std::cout << dirEntry.path() << std::endl;
         std::map<std::string, inverted_item> indexer{};
         std::ifstream input(dirEntry.path());
         const std::string document_id{dirEntry.path()};
         int position{};
-        for (std::string line; getline(input, line);) {
+
+        ContentReader reader{input};
+        using ContentIt = ContentReader::iterator;
+        ContentIt it = reader.begin();
+        ContentIt it_end = reader.end();
+
+        for (const auto &line : reader) {
             std::u32string u32line = to_utf32(line);
 
             for (std::u32string::const_iterator it = u32line.begin(); it != u32line.end(); ++it) {
@@ -52,6 +58,7 @@ int main() {
                 }
             }
         }
+
         for (auto const&[key, val] : indexer) {
             if (key == "一盤") {
                 std::cout << &val << std::endl;
