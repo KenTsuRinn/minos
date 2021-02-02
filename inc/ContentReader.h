@@ -6,26 +6,32 @@
 #define MINOS_CONTENTREADER_H
 
 #include <fstream>
+#include <functional>
 #include "ContentIterator.h"
 
 class ContentReader {
 public:
     using iterator = ContentIterator;
+
     ContentReader() = default;
 
     explicit ContentReader(std::ifstream &ifstream) : stream{ifstream} {
         for (std::string line; getline(stream, line);) {
-            if (line.empty() || line.data() == nullptr)
-                continue;
+            for (auto &p : this->pipes) {
+                p(line);
+            }
             lines.push_back(line);
         }
     }
+
+    void register_processor(std::initializer_list<std::function<void(std::string &)>> functions);
 
     iterator begin() const;
 
     iterator end() const;
 
 private:
+    std::vector<std::function<void(std::string &)>> pipes;
     std::ifstream &stream;
     std::vector<std::string> lines{};
 };
