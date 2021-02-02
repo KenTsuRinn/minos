@@ -10,5 +10,5 @@ ContentReader::iterator ContentReader::begin() const {
 }
 
 ContentReader::iterator ContentReader::end() const {
-    return ContentIterator::get_terminal_iterator();
+    return ContentIterator{};
 }
