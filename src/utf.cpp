@@ -3,10 +3,10 @@
 //
 #include "utf.h"
 #include <codecvt>
-#include <iterator>
 #include <locale>
 #include <string>
 #include <vector>
+#include <iostream>
 
 #ifdef _MSC_VER
 

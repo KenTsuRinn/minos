@@ -4,9 +4,15 @@
 
 #include "ContentIterator.h"
 
+ContentIterator::ContentIterator() {
+    this->nodes.push_back(this->TERMINAL);
+    this->size = this->nodes.size();
+}
+
 ContentIterator::ContentIterator(std::vector<std::string> nodes) {
     this->nodes = std::move(nodes);
-//    nodes.push_back(nullptr);
+    this->nodes.push_back(this->TERMINAL);
+    this->size = this->nodes.size();
 }
 
 // Dereferencable.
@@ -41,12 +47,20 @@ ContentIterator ContentIterator::operator--(int) {
 }
 
 bool ContentIterator::operator==(const ContentIterator &rhs) {
-    if (rhs.nodes.size() == 0)
-        return false;
     return nodes[current] == rhs.nodes[rhs.current];
 }
 
 
 bool ContentIterator::operator!=(const ContentIterator &rhs) {
-    return !(*this == rhs);
+    return !((*this).nodes[current] == rhs.nodes[rhs.current]);
+}
+
+
+std::string ContentIterator::TERMINAL = "ITERATOR_ENDING";
+
+ContentIterator ContentIterator::get_terminal_iterator() {
+    std::vector<std::string> ending{};
+    ending.push_back(ContentIterator::TERMINAL);
+    return ContentIterator{ending};
+
 }

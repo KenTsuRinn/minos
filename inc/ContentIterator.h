@@ -9,6 +9,7 @@
 #include <vector>
 #include <fstream>
 
+
 class ContentIterator {
 public:
     using value_type = std::string;
@@ -17,7 +18,7 @@ public:
     using reference = std::string &;
     using iterator_category = std::bidirectional_iterator_tag;
 
-    ContentIterator() = default;
+    ContentIterator();
 
     explicit ContentIterator(std::vector<std::string> nodes);
 
@@ -39,11 +40,16 @@ public:
 
     bool operator!=(const ContentIterator &rhs);
 
+    static std::string TERMINAL;
+
+    static ContentIterator get_terminal_iterator();
 private:
     using Nodes = std::vector<std::string>;
-    Nodes nodes;
+    Nodes nodes{};
     Nodes::size_type current{0};
+    Nodes::size_type size{0};
 };
+
 
 
 #endif //MINOS_CONTENTITERATOR_H

@@ -4,10 +4,11 @@
 
 #include <ContentReader.h>
 
+
 ContentReader::iterator ContentReader::begin() const {
     return ContentIterator{lines};
 }
 
 ContentReader::iterator ContentReader::end() const {
-    return ContentIterator{std::vector<std::string>{}};
+    return ContentIterator::get_terminal_iterator();
 }

@@ -11,12 +11,11 @@
 class ContentReader {
 public:
     using iterator = ContentIterator;
-
     ContentReader() = default;
 
     explicit ContentReader(std::ifstream &ifstream) : stream{ifstream} {
         for (std::string line; getline(stream, line);) {
-            if (line.empty())
+            if (line.empty() || line.data() == nullptr)
                 continue;
             lines.push_back(line);
         }

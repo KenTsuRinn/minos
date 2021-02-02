@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <utf.h>
 #include <map>
 #include <inverted_item.h>
