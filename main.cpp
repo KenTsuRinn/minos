@@ -14,15 +14,13 @@ int main() {
         std::ifstream input(dirEntry.path());
         const std::string document_id{dirEntry.path()};
         int position{};
-
+        content_reader::register_processor({
+                                                   null_string_filter
+                                           });
         content_reader reader{input};
-        using ContentIt = content_reader::iterator;
-        ContentIt it = reader.begin();
-        ContentIt it_end = reader.end();
+
 
         for (const auto &line : reader) {
-            if (line.empty())
-                continue;
             std::u32string u32line = to_utf32(line);
 
             for (std::u32string::const_iterator it = u32line.begin(); it != u32line.end(); ++it) {

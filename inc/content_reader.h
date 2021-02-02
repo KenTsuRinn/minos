@@ -9,6 +9,8 @@
 #include <functional>
 #include "content_iterator.h"
 
+extern std::function<bool(std::string &)> null_string_filter;
+
 class content_reader {
 public:
     using iterator = content_iterator;
@@ -17,21 +19,23 @@ public:
 
     explicit content_reader(std::ifstream &ifstream) : stream{ifstream} {
         for (std::string line; getline(stream, line);) {
-            for (auto &p : this->pipes) {
-                p(line);
+            for (auto &p : pipes) {
+                if (p(line))
+                    continue;
+                lines.push_back(line);
+
             }
-            lines.push_back(line);
         }
     }
 
-    void register_processor(std::initializer_list<std::function<void(std::string &)>> functions);
+    static void register_processor(std::initializer_list<std::function<bool(std::string &)>> functions);
 
     iterator begin() const;
 
     iterator end() const;
 
 private:
-    std::vector<std::function<void(std::string &)>> pipes;
+    static std::vector<std::function<bool(std::string &)>> pipes;
     std::ifstream &stream;
     std::vector<std::string> lines{};
 };
