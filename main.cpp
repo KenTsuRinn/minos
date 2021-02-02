@@ -4,7 +4,7 @@
 #include <inverted_item.h>
 #include <sstream>
 #include <filesystem>
-#include <ContentReader.h>
+#include <content_reader.h>
 
 int main() {
     using recursive_directory_iterator = std::filesystem::recursive_directory_iterator;
@@ -15,8 +15,8 @@ int main() {
         const std::string document_id{dirEntry.path()};
         int position{};
 
-        ContentReader reader{input};
-        using ContentIt = ContentReader::iterator;
+        content_reader reader{input};
+        using ContentIt = content_reader::iterator;
         ContentIt it = reader.begin();
         ContentIt it_end = reader.end();
 

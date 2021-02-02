@@ -2,15 +2,15 @@
 // Created by kennetsu on 2/1/21.
 //
 
-#ifndef MINOS_CONTENTITERATOR_H
-#define MINOS_CONTENTITERATOR_H
+#ifndef MINOS_CONTENT_ITERATOR_H
+#define MINOS_CONTENT_ITERATOR_H
 
 #include <iterator>
 #include <vector>
 #include <fstream>
 
 
-class ContentIterator {
+class content_iterator {
 public:
     using value_type = std::string;
     using difference_type = std::ptrdiff_t;
@@ -18,31 +18,31 @@ public:
     using reference = std::string &;
     using iterator_category = std::bidirectional_iterator_tag;
 
-    ContentIterator();
+    content_iterator();
 
-    explicit ContentIterator(std::vector<std::string> nodes);
+    explicit content_iterator(std::vector<std::string> nodes);
 
     // Dereferencable.
     reference operator*() const;
 
     // Pre- and post-incrementable.
-    ContentIterator &operator++();
+    content_iterator &operator++();
 
-    ContentIterator operator++(int);
+    content_iterator operator++(int);
 
     // Pre- and post-decrementable.
-    ContentIterator &operator--();
+    content_iterator &operator--();
 
-    ContentIterator operator--(int);
+    content_iterator operator--(int);
 
     // Equality / inequality.
-    bool operator==(const ContentIterator &rhs);
+    bool operator==(const content_iterator &rhs);
 
-    bool operator!=(const ContentIterator &rhs);
+    bool operator!=(const content_iterator &rhs);
 
     static std::string TERMINAL;
 
-    static ContentIterator get_terminal_iterator();
+    static content_iterator get_terminal_iterator();
 private:
     using Nodes = std::vector<std::string>;
     Nodes nodes{};
@@ -52,4 +52,4 @@ private:
 
 
 
-#endif //MINOS_CONTENTITERATOR_H
+#endif //MINOS_CONTENT_ITERATOR_H

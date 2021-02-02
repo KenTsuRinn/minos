@@ -2,20 +2,20 @@
 // Created by kennetsu on 2/2/21.
 //
 
-#ifndef MINOS_CONTENTREADER_H
-#define MINOS_CONTENTREADER_H
+#ifndef MINOS_CONTENT_READER_H
+#define MINOS_CONTENT_READER_H
 
 #include <fstream>
 #include <functional>
-#include "ContentIterator.h"
+#include "content_iterator.h"
 
-class ContentReader {
+class content_reader {
 public:
-    using iterator = ContentIterator;
+    using iterator = content_iterator;
 
-    ContentReader() = default;
+    content_reader() = default;
 
-    explicit ContentReader(std::ifstream &ifstream) : stream{ifstream} {
+    explicit content_reader(std::ifstream &ifstream) : stream{ifstream} {
         for (std::string line; getline(stream, line);) {
             for (auto &p : this->pipes) {
                 p(line);
@@ -36,4 +36,4 @@ private:
     std::vector<std::string> lines{};
 };
 
-#endif //MINOS_CONTENTREADER_H
+#endif //MINOS_CONTENT_READER_H
