@@ -18,8 +18,6 @@ int main() {
                                                    null_string_filter
                                            });
         content_reader reader{input};
-
-
         for (const auto &line : reader) {
             std::u32string u32line = to_utf32(line);
 
