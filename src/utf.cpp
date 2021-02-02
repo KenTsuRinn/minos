@@ -34,68 +34,63 @@ std::u32string to_utf32(std::string const & s)
 #else
 
 std::string to_utf8(std::u16string const &s) {
-    std::wstring_convert<std::codecvt_utf8<char16_t>, char16_t> conv;
-    return conv.to_bytes(s);
+    return encoding::char16_t_conv.to_bytes(s);
 }
 
-std::string to_utf8(std::u32string const &s) {
-    std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
-    return conv.to_bytes(s);
+std::string encoding::to_utf8(std::u32string const &s) {
+    return encoding::char32_t_conv.to_bytes(s);
 }
 
-std::u16string to_utf16(std::string const &s) {
-    std::wstring_convert<std::codecvt_utf8<char16_t>, char16_t> convert;
-    return convert.from_bytes(s);
+std::u16string encoding::to_utf16(std::string const &s) {
+    return encoding::char16_t_conv.from_bytes(s);
 }
 
-std::u32string to_utf32(std::string const &s) {
-    std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
-    return conv.from_bytes(s);
+std::u32string encoding::to_utf32(std::string const &s) {
+    return encoding::char32_t_conv.from_bytes(s);
 }
 
 #endif
 
-std::string to_utf8(std::string const &s) {
+std::string encoding::to_utf8(std::string const &s) {
     return s;
 }
 
-std::string to_utf8(std::wstring const &s) {
+std::string encoding::to_utf8(std::wstring const &s) {
     std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> convert;
     auto const p = reinterpret_cast<wchar_t const *>(s.data());
     return convert.to_bytes(p, p + s.size());
 }
 
-std::wstring to_wstring(std::wstring const &s) {
+std::wstring encoding::to_wstring(std::wstring const &s) {
     return s;
 }
 
-std::wstring to_wstring(std::string const &s) {
-    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> convert;
-    auto asInt = convert.from_bytes(s);
+std::wstring encoding::to_wstring(std::string const &s) {
+    auto asInt = encoding::wchar_conv.from_bytes(s);
     return std::wstring(reinterpret_cast<wchar_t const *>(asInt.data()), asInt.length());
 }
 
-std::wstring to_wstring(std::u32string const &s) {
+std::wstring encoding::to_wstring(std::u32string const &s) {
     return to_wstring(to_utf8(s));
 }
 
-std::u16string to_utf16(std::u16string const &s) {
+std::u16string encoding::to_utf16(std::u16string const &s) {
     return s;
 }
 
 std::u16string to_utf16(std::wstring const &s) {
-    return to_utf16(to_utf8(s));
+    return encoding::to_utf16(encoding::to_utf8(s));
 }
 
-std::u32string to_utf32(std::u32string const &s) {
+std::u32string encoding::to_utf32(std::u32string const &s) {
     return s;
 }
 
-std::u32string to_utf32(std::wstring const &s) {
+std::u32string encoding::to_utf32(std::wstring const &s) {
     return to_utf32(to_utf8(s));
 }
 
-std::u32string read_with_bom(std::istream &&src) {
+std::u32string encoding::read_with_bom(std::istream &&src) {
 
     enum encoding {
         ENCODING_UTF32_BE = 0,
@@ -173,7 +168,7 @@ std::u32string read_with_bom(std::istream &&src) {
     }
 }
 
-bool is_ignored_char(char32_t const &c) {
+bool encoding::is_ignored_char(char32_t const &c) {
     switch (c) {
         case ' ':
         case '\f':
@@ -228,3 +223,5 @@ bool is_ignored_char(char32_t const &c) {
             return 0;
     }
 }
+
+

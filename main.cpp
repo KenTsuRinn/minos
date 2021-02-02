@@ -19,15 +19,15 @@ int main() {
                                            });
         content_reader reader{input};
         for (const auto &line : reader) {
-            std::u32string u32line = to_utf32(line);
+            std::u32string u32line = encoding::to_utf32(line);
 
             for (std::u32string::const_iterator it = u32line.begin(); it != u32line.end(); ++it) {
-                if (is_ignored_char(*it))
+                if (encoding::is_ignored_char(*it))
                     continue;
 
                 ++position;
                 std::u32string ngram_token{*it, *(it + 1)};
-                std::string token = to_utf8(ngram_token);
+                std::string token = encoding::to_utf8(ngram_token);
 
                 std::size_t token_hash = std::hash<std::string>{}(token);
                 std::ostringstream stringStream;
