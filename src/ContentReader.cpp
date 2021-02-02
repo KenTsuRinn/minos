@@ -5,11 +5,9 @@
 #include <ContentReader.h>
 
 ContentReader::iterator ContentReader::begin() const {
-    stream.seekg(std::ios::beg);
-    return ContentIterator{stream};
+    return ContentIterator{lines};
 }
 
 ContentReader::iterator ContentReader::end() const {
-    stream.seekg(std::ios::end);
-    return ContentIterator{stream};
+    return ContentIterator{std::vector<std::string>{}};
 }

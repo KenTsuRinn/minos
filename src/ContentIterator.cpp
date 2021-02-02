@@ -4,19 +4,14 @@
 
 #include "ContentIterator.h"
 
-std::ifstream &ContentIterator::go_to_line(size_t num) const {
-    stream.seekg(std::ios::beg);
-    for (int i = 0; i < num + 1; ++i) {
-        stream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    }
-    return stream;
+ContentIterator::ContentIterator(std::vector<std::string> nodes) {
+    this->nodes = std::move(nodes);
+//    nodes.push_back(nullptr);
 }
 
 // Dereferencable.
 ContentIterator::reference ContentIterator::operator*() const {
-    std::ifstream &s = this->go_to_line(current);
-    std::getline(s, this->current_line);
-    return current_line;
+    return const_cast<std::string &>(nodes[current]);
 }
 
 // Pre-incrementable: ++it.
@@ -46,14 +41,9 @@ ContentIterator ContentIterator::operator--(int) {
 }
 
 bool ContentIterator::operator==(const ContentIterator &rhs) {
-    std::ifstream &s = this->go_to_line(current);
-    std::string left{};
-    std::getline(s, left);
-
-    auto &rs = rhs.go_to_line(rhs.current);
-    std::string right{};
-    std::getline(rs, right);
-    return left == right;
+    if (rhs.nodes.size() == 0)
+        return false;
+    return nodes[current] == rhs.nodes[rhs.current];
 }
 
 

@@ -22,6 +22,8 @@ int main() {
         ContentIt it_end = reader.end();
 
         for (const auto &line : reader) {
+            if (line.empty())
+                continue;
             std::u32string u32line = to_utf32(line);
 
             for (std::u32string::const_iterator it = u32line.begin(); it != u32line.end(); ++it) {

@@ -19,11 +19,7 @@ public:
 
     ContentIterator() = default;
 
-    explicit ContentIterator(std::ifstream &stream) : stream{stream} {
-        this->stream.clear();
-        this->stream.seekg(0);
-
-    };
+    explicit ContentIterator(std::vector<std::string> nodes);
 
     // Dereferencable.
     reference operator*() const;
@@ -44,11 +40,9 @@ public:
     bool operator!=(const ContentIterator &rhs);
 
 private:
-    std::ifstream &go_to_line(size_t num) const;
-
-    std::ifstream &stream;
-    mutable std::string current_line{};
-    size_t current{0};
+    using Nodes = std::vector<std::string>;
+    Nodes nodes;
+    Nodes::size_type current{0};
 };
 
 
