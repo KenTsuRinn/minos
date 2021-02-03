@@ -49,6 +49,7 @@ int main() {
                     inverteds.push_back(s);
                     indexer[token] = inverteds;
                 }
+
             }
         }
     }

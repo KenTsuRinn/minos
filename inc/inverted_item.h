@@ -32,6 +32,16 @@ public:
         return this->positions.size();
     }
 
+    const std::string get_all_positions() const {
+        std::stringstream ss;
+        for (auto &p:this->positions) {
+            ss << " ";
+            ss << p;
+            ss << " ";
+        }
+        return ss.str();
+    }
+
 private:
     std::size_t token_id;
     std::string document_id;
@@ -45,7 +55,7 @@ std::string to_string(const inverted_item &i) {
     ss << " document_id: ";
     ss << i.get_document_id();
     ss << " positions: ";
-    ss << i.get_position_count();
+    ss << i.get_all_positions();
     return ss.str();
 }
 
