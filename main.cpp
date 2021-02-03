@@ -5,18 +5,19 @@
 #include <sstream>
 #include <filesystem>
 #include <content_reader.h>
+#include <utils.h>
 
 int main() {
     using recursive_directory_iterator = std::filesystem::recursive_directory_iterator;
+    std::map<std::string, std::vector<inverted_item>> indexer{};
+    content_reader::register_processor({
+                                               null_string_filter
+                                       });
     for (const auto &dirEntry : recursive_directory_iterator("./data")) {
-        std::cout << dirEntry.path() << std::endl;
-        std::map<std::string, inverted_item> indexer{};
+        LOG(dirEntry.path());
         std::ifstream input(dirEntry.path());
         const std::string document_id{dirEntry.path()};
         int position{};
-        content_reader::register_processor({
-                                                   null_string_filter
-                                           });
         content_reader reader{input};
         for (const auto &line : reader) {
             std::u32string u32line = encoding::to_utf32(line);
@@ -24,7 +25,6 @@ int main() {
             for (std::u32string::const_iterator it = u32line.begin(); it != u32line.end(); ++it) {
                 if (encoding::is_ignored_char(*it))
                     continue;
-
                 ++position;
                 std::u32string ngram_token{*it, *(it + 1)};
                 std::string token = encoding::to_utf8(ngram_token);
@@ -36,38 +36,30 @@ int main() {
                 stringStream << token;
                 std::string copyOfStr = stringStream.str();
 
+                inverted_item s{document_id, token_hash};
+                s.add_position(position);
+
                 if (indexer.contains(token)) {
-                    std::map<std::string, inverted_item>::iterator it = indexer.find(token);
+                    auto it = indexer.find(token);
                     if (it != indexer.end()) {
-                        if (token == "一盤") {
-                            std::cout << &(it->second) << std::endl;
-
-                        }
-                        it->second.add_position(position);
-
+                        it->second.push_back(s);
                     }
-
-
                 } else {
-                    inverted_item s{document_id, token_hash};
-                    s.add_position(position);
-                    indexer[token] = s;
+                    std::vector<inverted_item> inverteds{};
+                    inverteds.push_back(s);
+                    indexer[token] = inverteds;
                 }
-            }
-        }
-
-        for (auto const&[key, val] : indexer) {
-            if (key == "一盤") {
-                std::cout << &val << std::endl;
-                std::cout << val.get_positions() << std::endl;
 
             }
-            if (val.get_positions() > 1)
-                std::cout << key        // string (key)
-                          << ':'
-                          << std::endl;
         }
     }
-
+    for (auto const&[key, val] : indexer) {
+        LOG(key);
+        for (auto const &v : val) {
+            LOG(toString<inverted_item>(v));
+        }
+        LOG("-----------------------");
+    }
     return 0;
+
 }
